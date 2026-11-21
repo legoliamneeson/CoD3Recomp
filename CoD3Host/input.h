@@ -29,6 +29,9 @@ namespace Input
     };
 
     Pad State();
+    // (co-op v46) the real controllers as they are now (any connected pad, deadzones applied), for the
+    // co-op lobby's own navigation while the game's input is held; false when none is connected
+    bool RealPad(uint16_t& buttons, int16_t& leftX, int16_t& leftY);
     // Experimental stationary L3 save/R3 return, sampled before sprint filtering.
     void SetTacticalPointInput(bool active, bool canReturn);
     bool TacticalPointSaveHeld();
@@ -40,10 +43,22 @@ namespace Input
     // the team and class menus): "a", "b", "start", ... for two of the
     // title's reads of the pad, as COD3_PAD's presses.
     void PressButton(const char* name);
+    // 0.5.853: the left trigger held from code while true (tests: COD3_ADS_TEST)
+    void HoldAim(bool held);
+    // 0.5.454: once noclip has been typed in the console, a double tap of A
+    // (or jump) puts noclip on and off
+    void ArmNoclipTap();
 
     // Whether the mouse is being held by the window and turned into the right
     // stick. Clicking in the window takes it; Escape gives it back.
     bool MouseHeld();
+
+    // 0.5.478: whether the prompts show the pad's buttons: as the settings
+    // say, or (automatic) when the pad was used last rather than the
+    // keyboard and mouse; and whether a menu, not a level, has the keys
+    // (pc_prompts.cpp).
+    bool PadPrompts();
+    bool MenuMode();
     // Window management temporarily owns the pointer; no clip/recenter or
     // automatic capture until the move, resize or mode change has finished.
     void SuspendMouseCapture(bool suspended);
@@ -89,10 +104,21 @@ namespace Input
     // the shoulders and both triggers kept from it), the right trigger's
     // presses counted instead (TakeMortarFires: how many since the last call).
     void SetMortar(bool on);
+    // 0.5.811: the dual pistols in hand (mp_fixes.cpp): hip fire only (the
+    // left trigger, aim, kept from the title); noFire: the right trigger kept
+    // too (the left gun's half of the reload)
+    void SetDualPistols(bool held, bool noFire);
+    // 0.5.812: tests (COD3_DUAL_TEST, mp_fixes.cpp): the right trigger held, or
+    // X (reload) pressed, for this many pad reads, in a match only
+    void TestHold(bool reload, int reads);
     // 0.5.300: the right trigger passed on to the title too while at the
     // mortar (the campaign mortar interaction reads it to load a round).
     void SetMortarPassFire(bool pass);
     void PressCrouch();   // 0.5.307: one tap of crouch (B) for a few reads
+    void HoldButtons(uint16_t mask, int ms);
+    void SetLook(float rx, float ry, int ms);   // 0.5.979: the right stick held there (-1..1) for ms (tests)
+    void PullTriggers(int leftMs, int rightMs);   // 0.5.979: the triggers pulled for so long (tests)   // 0.5.972: pad buttons (XInput bits) held for ms (tests)
+    void PressWeaponCycle();   // 0.5.948: one tap of the weapon cycle (Y) for a few reads
     int TakeMortarFires();
     // MP gameplay consumes each Y/wheel edge once through the native weapon
     // command; native menu/vehicle Y remains available when the bridge is off.

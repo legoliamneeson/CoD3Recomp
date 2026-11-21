@@ -82,4 +82,9 @@ thirdparty/ffmpeg/
 test-request.txt
 build-request*.txt
 build-status.txt
-CoD3Host/version_number.h
+
+# Local tool state, backups and session settings (not source)
+.claude/
+tools/master-server/.wrangler/
+CoD3Host/_backup_before_controller_fix/
+CoD3Recomp/

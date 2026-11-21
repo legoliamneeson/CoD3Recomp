@@ -8,9 +8,11 @@ and the installer all come from his project.
 
 > **Where this fork is at:** Frank's public 0.4.0 build only let me play through the first 4–5 campaign
 > missions. In this fork **the whole campaign plays through**, and **multiplayer works** — System Link
-> over LAN or Tailscale, with bots, custom classes, DLC maps and restored cut content.
+> over LAN, Tailscale or public servers over the internet, with bots, custom classes, DLC maps, restored
+> cut content, new maps and guns brought in from Call of Duty 2 and World at War, tanks, and an
+> experimental co-op campaign.
 >
-> Current source version: **0.5.424**. Every change since 0.4.0 is logged in
+> Current source version: **0.6.4**. Every change since 0.4.0 is logged in
 > [docs/PATCH-NOTES.md](docs/PATCH-NOTES.md), newest first.
 
 You need your **own** Xbox 360 disc image of Call of Duty 3. No game files are included in this repository.
@@ -98,14 +100,122 @@ You need your **own** Xbox 360 disc image of Call of Duty 3. No game files are i
   command and drawing threads (about 3.1–3.4 µs a draw each)
 - Requires a CPU with SSE4.2 (x86-64-v2); no AVX2 needed
 
-## Where it stands (0.5.424)
+**Public servers and 32-player lobbies (0.5.426 – 0.5.462)**
+- Host a game on a **public list** and join others' public games over the internet, no Tailscale needed
+  (F11 → System Link → "Public game"; UDP port 28960). The list runs on a small Cloudflare worker
+  (`tools/master-server`)
+- The lobby's max players goes to **32**; the DLC maps' loading pictures are back
+- Public games get the custom rules, bots, UAV and Domination too
 
-- Open: confirming the killcam freeze fix (0.5.418) in a two-player game; the effects crash and one
-  heap-full freeze are guarded (`fxguard:` / `heapwait:` in CoD3MP.log) but their causes are not found
+**The Hellfire Barrage and killstreak changes (0.5.438 – 0.5.454)**
+- The **Hellfire Barrage** (in the Typhoon run's place): the game's own artillery shells over the whole
+  map, with bombers overhead; its kills are the caller's and show in the kill feed
+- Killstreaks at 2, 4, 6 and 8 kills; a killstreak's kills earn no further streak
+
+**Bots play the objectives: Capture the Flag (0.5.457 – 0.5.608)**
+- Bots play **Capture the Flag, Single Capture the Flag and Headquarters**: they take, carry, capture
+  and return flags the way a player's client does, and carriers go home the way they came
+- Attackers, defenders, squads and escorts in left / middle / right lanes; routes, doorways and each
+  base's ways out learnt from play and kept between games
+- Bots route to objectives over the map they have learnt (A*), take stairs, look round for doors,
+  stop going back and forth, and no longer spawn in the enemy's sights
+- Better fighting: they aim at the body, settle their aim, use their sights, crouch and go prone more;
+  bazooka bots draw their pistol up close; one grenade at a time
+
+**Spectator, menus by mouse and the pre-match countdown (0.5.595 – 0.5.650)**
+- A **SPECTATOR** row on the team choice (and F6 anywhere): no HUD, a free camera or following players;
+  leave the seat to join the match, switch sides from the pause menu
+- **Mouse** in the campaign and multiplayer menus (lists, arrows, the quit question, the lobby;
+  right click goes back); button prompts shown as keys, switching with what you use
+- A pre-match countdown with the sides balanced before the start
+- The campaign's own sprint, put back as FrankHUN88453 did
+
+**Killcam explosions (0.5.628 – 0.5.634)**
+- Explosions replay in the killcam, with the killer's HUD and a steady view
+
+**Guns from Call of Duty 2 and World at War (0.5.652 – 0.5.758)**
+Made from your own copies of those games by the tools in `tools/cod2import` and `tools/waw`
+(no other game's files are in this repository):
+- **Webley revolver** (CoD2): its own weapon with CoD2's model, numbers and reload, the cylinder showing
+  the rounds left, its world model and kill-feed icon
+- **M2 flamethrower** (World at War): shoots fire, not bullets — WaW's flame stream from the nozzle,
+  fire left where it lands, burning; WaW's own pose and arm animations; overheats like in WaW
+- **Scoped Mosin-Nagant** (CoD2): its own model, scope, sound, world model and kill icon
+- **Signal flare** (World at War): a special grenade that lights up, burns whoever stands on it and
+  blinds; WaW's flare stick and sounds
+- Bots carry and use them all
+
+**New maps: Carentan, Seelow and Seelow Night (0.5.667 – 0.5.837)**
+- **Carentan** from Call of Duty 2 as its own map pack: its geometry, textures, collision, spawns and flags
+- **Seelow** from World at War as a map pack (`devmap seelow`): geometry, textures, props, collision,
+  ladders and spawns; WaW-style **mantling** over walls, trench lips and windows
+- **Seelow Night** (`devmap seelownight`): Longyard's night sky, moon, fog and moonlight, with the
+  player's arms lit by moonlight
+
+**Tanks on any map (0.5.730 – 0.5.851)**
+- CoD3's tanks on maps that never had them (Seelow first): Panzer IVs and Shermans, drivable, with
+  Merville's own tank data
+- The cannon with its real shot sound, muzzle blast, reload and shell; shell hits explode; the machine
+  gun with its own fire sound, flash and ring-off; engine, tread and suspension sounds
+- Shells do real damage and the kill is the driver's
+- Bots get into tanks on their own (from the tank's corners, by the learnt map's route) and fire the
+  cannon and the machine gun
+- The mortar killstreak with its real loading and firing sounds, explosions and hits
+- Map changes between Seelow and Merville no longer crash or freeze
+
+**COLT .45 DUAL (0.5.809 – 0.5.838)**
+- Two Colts: a second, mirrored left arm and Colt; reloads one gun at a time; hip fire only;
+  a muzzle flash on both barrels; others see two Colts in your hands
+
+**Co-op campaign (experimental, 0.5.425 – 0.5.671)**
+- Co-op v38, v40 (World at War style co-op campaign) and v46 from the co-op team merged
+
+**Bots drive tanks (0.5.852 – 0.5.868)**
+- Bots drive tanks at full speed along known routes, and fire the cannon and machine gun they drive
+- Bots get a random extra gun (the added guns too) and hold fire with a teammate in the line
+- The friend sees bots die (kill feed, death); bots no longer cartwheel on a joining player's screen;
+  the flare-match freeze fixed; the Mosin's scope fixed
+
+**Co-op campaign, two players (0.5.869 – 0.6.4)**
+- A downed player has 10 s and can be revived by holding Use; both down = back to the checkpoint
+- Each player sees the other move, aim, fire, reload, throw, melee, crouch and switch guns on his body,
+  with no T-pose or bind pose
+- Effects, smoke and grenades seen on both screens; no friendly fire between the two players
+- The joining player's shots, throws, Use, hints and prompts work in the host's world: pick-ups and
+  gun swaps off the ground, triggers, the level's breakable things and mission objectives
+- Mounted guns: the joining player mounts, aims and fires them, and is seen doing it
+- Rides: a seat beside the host in a vehicle (Falaise's jeep gun) and off it where the host stands
+- The joining player is brought along after scripted scenes (Saint-Lo's wall) and no longer pulled
+  along by a sprinting host; an action he starts (a live grenade's pick-up) no longer plays on the host
+- Hands-off test tools for two copies on one PC (`tools/coop/`)
+
+**Launcher (new, [launcher/](launcher/))**
+- A Windows launcher for players: Campaign, Multiplayer and Verify / Repair; picks your existing install
+- Checks a signed release each time it opens and downloads only the files that changed (all six map
+  packs, textures, custom guns), with backups, resume and repair; never downgrades a newer local build
+- The source, tests, the Cloudflare update service and the publish scripts are in `launcher/`.
+  The signing key, the packaged release and built exes are not in this repository
+
+**Version numbers**
+- The last number stops at 999: after 0.5.999 came **0.6.0**. The builds first called 0.5.1000 to
+  0.5.1004 are 0.6.0 to 0.6.4 in the notes
+
+**Stability**
+- The campaign no longer freezes at the legal screen; freezes loading CTF on Rouen and in long games,
+  a sound flood that dropped Rouen to 8 fps and a render list crash fixed
+
+## Where it stands (0.6.4)
+
+- Co-op campaign: two players play Saint-Lo together; still open: the other player's pose on a
+  mounted gun, a jump move, more vehicles and cutscenes, and a two-PC test across the internet
+- Bots' tanks drive and fight; tank pathing can still be rough on some maps
+- The killcam freeze fix (0.5.418) and the guarded effects crash and heap-full freeze
+  (`fxguard:` / `heapwait:` in CoD3MP.log) still stand as before
 - Every performance change since 0.5.391 can be switched off with an environment variable; they are
   listed in [patch notes](docs/PATCH-NOTES.md) under each build
 
-See [patch notes](docs/PATCH-NOTES.md) for build history and
+See [patch notes](docs/PATCH-NOTES.md) for build history,
+[release notes for 0.6.4](docs/RELEASE-0.6.4-NOTES.md), and
 [handoff](docs/HANDOFF.md) for the current checkpoint. This is a source
 update; no game data, recompiled game code or compiled game executables are published here.
 

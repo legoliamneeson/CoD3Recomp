@@ -1,4 +1,79 @@
-# Current source / local install: 0.5.409 / 0.5.409; built OK, Rimling test running. Source-only GitHub release407 published; see top NEXT-SESSION STATE. Read PICK-ME-UP.md and top STATE lines.
+<!-- claude-2026-11-13-handoff -->
+**HANDOFF 2026-11-13 (Claude): no game code changed. Version rule: the last number stops at 999 (0.5.999 -> 0.6.0); 0.5.1000-0.5.1004 renamed 0.6.0-0.6.4 in notes, docs, build logs and test logs; BUILD-MULTIPLAYER.ps1's fallback rolls over; CLAUDE.md's build loop says 0.6.N. 0.6.4 rebuilt with the same code so the exes say it. Friend zip CoD3MP-update-0.6.4.zip. Launcher feed (cod3-updates.hovgtv.workers.dev) published 0.6.4 from Downloads\CoD3-Launcher-Author-Kit. GitHub: fork main ee2d32e "Release 0.6.4 source" (81 files: source since 0.5.851, launcher/ without key/payload/exes, README 0.6.4, docs/RELEASE-0.6.4-NOTES.md); release v0.6.4 made by the user. Details: docs/CLAUDE-SESSION-2026-11-13.md. Next build 0.6.5.**
+<!-- /claude-2026-11-13-handoff -->
+
+<!-- claude-2026-11-10-handoff -->
+**HANDOFF 2026-11-10 ~13:00 (Claude): files changed today: coop_laststand.cpp (the shield in the sub_82564888 hook, 'coop: damage/die/shield/health' logs, hooks on sub_8255EF30 and sub_8255F488 that only log), coop_host.cpp (TidyBodyTree), coop_events.cpp (FxMsg wait/born), coop.h (ProtocolVersion 40004), PATCH-NOTES 0.5.885-0.5.889. source+install 0.5.889 built OK (12:48); NOTHING committed (fork still 0.5.851); no friend zip. CO-OP CAMPAIGN (CoD3.exe). THREE FIXES IN, NONE TESTED: (1) 0.5.887 a real death (the grenade that failed the mission past the down/revive rule): with two players a player takes every G_Damage hit behind a health shield and a lethal one goes to the rule; (2) 0.5.889 the T-pose's flicker: one animation weighs each frame, moves snap (TidyBodyTree); (3) 0.5.889 the smoke grenade that stood in the air: an effect that follows a missile waits for the missile's puppet (K_FX wait, ProtocolVersion 40004). THE USER'S PC SHUT DOWN FROM HEAT during a two-copy test (t888a, 91 s in): the user said NO TESTS FOR NOW. Do not launch the game without asking; when allowed, add --env COD3_UNLOCKFPS=0 (30 fps) to coop_test.py. Read the section '2026-11-10 (Claude, continuing' at the END of docs/CLAUDE-SESSION-2026-11-09.md: it has the one test line that covers all three fixes and what to read in the logs. Waiting on the user: either a capped two-copy test, or their own play of 0.5.889 with the friend (both PCs need it) and the logs after. Asked, unanswered: on whose screen the hovering smoke was seen.**
+<!-- /claude-2026-11-10-handoff -->
+
+<!-- claude-2026-11-09b-handoff -->
+**HANDOFF 2026-11-09 late (Claude): source+install 0.5.875 built OK; NOTHING committed (fork still 0.5.851); no friend zip. Work order item 1 DONE and tested (t875a): down 10 s, revive by holding Use (pad X) beside the downed player for 3 s, not revived = back in beside the other, ProtocolVersion 40003. NEXT: item 2 of the WORK ORDER in docs/CLAUDE-SESSION-2026-11-09.md (the effects not sent yet), then 3..9 in order. See its section 'PROGRESS AFTER THE WORK ORDER'. UPDATE 0.5.876 (built 22:56, test t876a PASSED): work order item 2 mostly DONE: effects from sub_82429238/82429330 are sent (their matrices were whole; only the rows' 4th numbers were stack leftovers, now sent as 0 0 0 1): join played 1161, refused 0 (t874a: 461 / 24). Left of item 2: sub_824245D8's by-handle effects (28 in the test, all from caller 820FBD70) and effects that follow a player. USER REPORT 23:05: 'still seeing the other player in a tpose position as the idle stance' (not seen in t876a's joiner screenshot: the host's body stands in its idle there; which screen he saw it on was asked). Source+install are 0.5.876. UPDATE 23:30: source+install are 0.5.878. THE OPEN PROBLEM IS THE OTHER PLAYER'S T-POSE (user report, reproduced on both screens in t877a and still there in t878a): 0.5.877 (idle restarted a frame early) and 0.5.878 (moves set with sub_82500B80 so the parent nodes weigh) did NOT cure it. Read 'T-POSE: WHAT IS KNOWN' in docs/CLAUDE-SESSION-2026-11-09.md before anything else. UPDATE 23:55: T-POSE FIXED in 0.5.880 (source+install; test t880a: both screens show the other player in his idle after walking, strafing and prone). Cause: parent nodes of the body's animation tree left weighing with no animation under them (TidyBodyTree, coop_host.cpp). Nothing committed, no zip. NEXT: the rest of work order item 2 (by-handle effects from caller 820FBD70, effects that follow a player), then item 3 (true inputs on the body), and the small things listed under 'AFTER THE T-POSE' in the session file. UPDATE 2026-11-10 00:05: source+install 0.5.881 (test t881a PASSED): the by-handle effects are sent too (the waiting list at 8290B5D0 emptied by sub_820FBD00): join played 199, refused 0. WORK ORDER ITEM 2 IS DONE except effects that follow a player (left to item 3). NEXT: item 3 (the other player's fire, reload, throw, jump on his body), then 4..9. Nothing committed, no zip. HANDOFF 2026-11-10 00:45 (session limit): source+install 0.5.884, built OK, test t884a run. Item 3 PART DONE: the other player's fire, grenade throw, melee, reload and aim show on his body from his true state (both directions heard and played). FIRST THING TOMORROW, A BUG IN THE DEATH RULE: in t884a the host was 'KILLED BY A GRENADE' and the mission FAILED straight to the checkpoint with NO last stand (no 'is down' line): a real grenade death goes round the down/revive rule. Read 'HANDOFF 2026-11-10' in docs/CLAUDE-SESSION-2026-11-09.md. Nothing committed, no zip.**
+<!-- /claude-2026-11-09b-handoff -->
+
+<!-- claude-2026-11-09-handoff -->
+**HANDOFF 2026-11-09 ~23:15 (Claude): source+install 0.5.874 built OK; NOTHING committed (fork still 0.5.851); no friend zip. CO-OP CAMPAIGN (CoD3.exe) work, two players. Read docs/CLAUDE-SESSION-2026-11-09.md.** New tool: tools/coop/coop_test.py (host + join on this PC; logs and screenshots in tools/coop/coop-out/TAG; backs the install logs up to logs-backup first; kills CoD3.exe and CoD3MP.exe at the end). New switches: COD3_COOP_RESPAWN (seconds down, 5), COD3_COOP_TESTDOWN0 (the host down at t), COD3_SKIPFILMS=1 now also skips the mission film in co-op, COD3_COOP_FXLOG=1 (effect calls and records). Files changed: coop_laststand.cpp, coop_host.cpp, coop_join.cpp, coop_hud.cpp, coop_events.cpp (FxForward/FxReceive/FxFrame), coop_probe.cpp (the sub_82423F08 hook calls FxForward), coop.h (K_FX, HostRespawn), title_fixes.cpp, DividerFilter.h (campaign-only), PATCH-NOTES 0.5.869-0.5.874. Both players need the same build (K_CMD and K_FX changed; ProtocolVersion was NOT bumped).
+<!-- /claude-2026-11-09-handoff -->
+
+<!-- claude-2026-11-08-handoff -->
+**HANDOFF 2026-11-08 ~03:30 (Claude): source+install 0.5.865; nothing committed. Read docs/CLAUDE-SESSION-2026-11-08.md (LATEST).** New tool: tools/carentan/triggers.py (objective triggers into mp_rouen.dcgb; --seelow). seelow_clipmap.py: backstops() (gap 0), RAILS, TREES (off). New test hooks: COD3_ADS_TEST, COD3_TANK_DRIVE_TEST, COD3_BOT_DIAG, COD3_BOT_EXTRA_GUN.
+<!-- claude-2026-11-08-handoff -->
+
+<!-- claude-2026-11-07-handoff -->
+**Claude handoff 2026-11-07 ~22:00 (0.5.851 built and installed; pushed to GitHub, release v0.5.851; full friend zip made):** docs/CLAUDE-SESSION-2026-11-07.md (its LATEST section) is the handoff. 0.5.828-832 dual Colt flash on both barrels (user: lined up); 0.5.833-834 tank shell kills credited to the driver; 0.5.835-836 two-Colt world model (unseen); 0.5.837 Seelow Night arms by moonlight (user: perfect); 0.5.839-851 bots get into tanks (steering pause g_lookVehicleUntil, corners, g_vehicleGoal route). Tools: kapf_lists.py; friend update scripts carry maps, custom guns and game files.
+<!-- /claude-2026-11-07-handoff -->
+
+<!-- claude-2026-11-05-handoff -->
+**Claude handoff 2026-11-05 ~22:20 (0.5.795 built and installed; nothing committed; friend zip on hold):** docs/CLAUDE-SESSION-2026-11-05.md is the handoff. 0.5.781-0.5.795: map changes with tanks fixed and tested both ways; tanks visible (Saint-Lo cut 7 of 8 blocks); Stuka cut (game\sp\crssrds\vehicles_stuka.cod); kapf.py decompresses campaign blocks; tank events through sub_82555160 + Merville's mp_merville.fx (0.5.795, unverified).
+<!-- /claude-2026-11-05-handoff -->
+
+<!-- claude-2026-11-03-handoff -->
+**UPDATE 2026-11-03 ~20:05 (Claude; source+install 0.5.758; nothing committed): flares have WaW's own sounds, burn whoever stands on them, and bots throw them (kits with the Mosin, Webley and flares). Bot smoke throws were broken before and now work. Read the top of docs/CLAUDE-SESSION-2026-11-03.md.**
+**UPDATE 2026-11-03 ~19:00 (Claude; source+install 0.5.751; nothing committed): the signal flare is finished: thrown, flies, lights after 1 s where it lands, no smoke (its grenade sunk, WaW stick left), blinding verified. Read the top of docs/CLAUDE-SESSION-2026-11-03.md.**
+**UPDATE 2026-11-03 ~17:30 (Claude; source+install 0.5.743; nothing committed): the signal flare now looks like WaW's flare stick (thrown, lying, in others' hands; first person keeps the game's grenade). Read the top of docs/CLAUDE-SESSION-2026-11-03.md.**
+**UPDATE 2026-11-03 ~16:40 (Claude; source+install 0.5.741; nothing committed): World at War's SIGNAL FLARE (class editor SPECIAL row) + Seelow fires centred + drain pipe roof. Read the top section of docs/CLAUDE-SESSION-2026-11-03.md.** Open: ask the user to throw a flare (scripts cannot throw); WaW's flare stick model; bots cannot throw it.
+**Claude handoff 2026-11-03 ~01:00 (0.5.738 built and installed; nothing committed; friend zip on hold):** docs/CLAUDE-SESSION-2026-11-03.md is the handoff. Seelow collision finished with the user live (4 .cgb files via the level's unzoned.cgb, WaW hull triangles' sign fixed, ladders, pipe, wall hole, tunnel kerb); night lighting kept to rooms, user's lanterns (my_lights.txt), CoD3 vehicle fire on WaW's 5 burning cars; Mantle assist setting.
+<!-- /claude-2026-11-03-handoff -->
+
+<!-- claude-2026-11-02-evening-handoff -->
+**Claude handoff 2026-11-02 ~20:45 (0.5.737 built and installed; nothing committed; friend zip on hold):** docs/CLAUDE-SESSION-2026-11-02-evening.md is the handoff (detail: ...-afternoon.md). Seelow/Seelow Night collision WaW-exact, models and foliage fixed, night lit; open: small WaW clip brushes (user's call), daylit arms at night.
+<!-- /claude-2026-11-02-evening-handoff -->
+
+<!-- claude-2026-11-02-afternoon-handoff -->
+**Claude handoff 2026-11-02 ~15:40 (0.5.734 installed; nothing committed; friend zip on hold):** docs/CLAUDE-SESSION-2026-11-02-afternoon.md is the handoff. Seelow collision: clip-bit swap removed, glass out, prop budget 30000; wheat upright; Seelow Night brighter and Longyard's fog (side session). Collision complaints not yet re-tested.
+<!-- /claude-2026-11-02-afternoon-handoff -->
+
+<!-- claude-2026-11-02-midday-handoff -->
+**Claude handoff 2026-11-02 ~12:15 (0.5.731 built and installed; nothing committed; friend zip on hold):** docs/CLAUDE-SESSION-2026-11-02-midday.md is the handoff. Seelow (day) clean and tested; Seelow Night new (devmap seelownight, NIGHT=1 tools/waw/seelow_install.sh); vehicles parked; tools/kapf/repack.py is the archive repacker (rules in the session file).
+<!-- /claude-2026-11-02-midday-handoff -->
+
+<!-- claude-2026-11-02-handoff -->
+**Claude handoff 2026-11-02 ~09:25 (0.5.728 built and installed; nothing committed):** docs/CLAUDE-SESSION-2026-11-02.md is the handoff (Seelow pipeline in tools/waw, data in seelow-work, install with tools/waw/seelow_install.sh; hard-won limits listed there and in memory converted-map-cell-limits).
+<!-- /claude-2026-11-02-handoff -->
+
+<!-- claude-2026-11-01-night-handoff -->
+**Claude handoff 2026-11-01 ~23:05 (source and install 0.5.725, built OK; nothing committed; friend zip on hold; Carentan still set P, "perfect now" per the user): read docs/CLAUDE-SESSION-2026-11-01-night.md FIRST (whole file is the handoff).** Done: World at War's M2 flamethrower nearly finished: fire not bullets (impact records cleared), WaW's own arm animations on CoD3's arms (tools/waw xanim.py / wawpose.py / make_flame_arms.py), the flame starting at the nozzle as the game draws it (the M2 draw's own constants), the gun drawn over its flame (stencil mask), others' flames in the world (fading with distance, hidden behind walls), WaW's overheating instead of a reload (heat bar over the ammo box), damage 26. UAV: an oval fitted to the map and to the draw distance (Isle 3113 x 1722). Next: the user plays 0.5.725, then CoD2's scoped Mosin-Nagant (plan in CLAUDE-SESSION-2026-11-01.md), Webley fingers, Seelow. Open: grey wall puffs with the M2; Isle deathmatch's closed gates (a smaller layout? not checked).
+<!-- /claude-2026-11-01-night-handoff -->
+
+<!-- claude-2026-11-01-evening-handoff -->
+**Claude handoff 2026-11-01 ~18:40 (source and install 0.5.702, built OK; Carentan installed as set P; nothing committed; friend zip on hold): read docs/CLAUDE-SESSION-2026-11-01-evening.md FIRST (whole file is the handoff).** Done today: Webley + flamethrower kill-feed icons; Carentan: CoD2-exact lightmaps, Rouen collision/props/trees/grass removed (renamed files are still loaded: drop them from the directory), floor gaps fixed (266 CoD2 triangles rebuilt), white-outs fixed (BSP leaves -> one cell), black walls fixed (decals on e_decal, drawn after walls; additive decals out). User: "the walls look perfect now". Open: the player "frozen" spot at -689 1601 (0.5.702 logs "player still"), check the last test's 23 low-triangle seconds, then flamethrower / Seelow / scoped Mosin.
+<!-- /claude-2026-11-01-evening-handoff -->
+
+<!-- claude-2026-11-01-handoff -->
+**Claude handoff 2026-11-01 ~10:30 (source and install 0.5.689, built; nothing committed): read the top section of docs/CLAUDE-SESSION-2026-11-01.md first ("END OF SESSION HANDOFF").** Carentan (CoD2's real map, its own map, never a Rouen reskin): collision converted and proven in game; the drawn level converts (tools/cod2import/cod2cells.py) and IS DRAWN in game in a scratch harness of the placeholder pack. One open bug: our own textures come out white (their imports never find them); 0.5.689's COD3_TEXLOOKUP=1 logs the texture handler and binds: run tools/carentan/runvariant.sh "" <case> with EXTRA_ENV="COD3_TEXLOOKUP=1" next (warn the user before any launch). Work data: D:\Call of Duty 3 (USA, Europe)\carentan-work\ (game data, not in git). The pack is back to its placeholder.
+<!-- /claude-2026-11-01-handoff -->
+
+# Current source / local install: 0.5.633 (2026-10-30 12:40), MG42 fix validated on Isle. Read docs/PICK-ME-UP.md, then docs/CODEX-SESSION-2026-10-30.md and docs/CLAUDE-SESSION-2026-10-30.md.
+<!-- codex-2026-10-30-handoff -->
+**Codex handoff 2026-10-30: source633; install0.5.632; 633 runtime UNTESTED.**
+Read [CODEX-SESSION-2026-10-30.md](CODEX-SESSION-2026-10-30.md).
+Root cause: Isle's mounted `mg42` animation entry shadows our handheld alias.
+633 scopes the MG34 override to handheld setup. Build status: building: 0.5.633 handheld MG42 animation-table collision fix; no test request.
+User requested wrap-up; all games stopped, original INI restored, no test queued.
+<!-- /codex-2026-10-30-handoff -->
+
+# Current source / local install: 0.5.631 (2026-10-30 00:08). Read docs/PICK-ME-UP.md, then docs/CLAUDE-SESSION-2026-10-30.md and docs/CLAUDE-SESSION-2026-10-29.md.
+# Current source / local install: 0.5.479 (2026-10-25 22:50). Read docs/PICK-ME-UP.md, then docs/CLAUDE-SESSION-2026-10-25.md.
+# (was) Current source / local install: 0.5.409 / 0.5.409; built OK, Rimling test running. Source-only GitHub release407 published; see top NEXT-SESSION STATE. Read PICK-ME-UP.md and top STATE lines.
 
 # CoD3 Recomp: handoff for the next assistant
 

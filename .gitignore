@@ -82,3 +82,4 @@ thirdparty/ffmpeg/
 test-request.txt
 build-request*.txt
 build-status.txt
+CoD3Host/version_number.h
